@@ -22,7 +22,7 @@ conda list
 conda config --add channels conda-forge
 conda create --name pygame37 python=3.7
 conda activate pygame37
-## if this succeeds the add this to your bash_profile so terminal starts here every time ie
+## if this succeeds then add this to your bash_profile so terminal starts here every time ie
 echo "conda activate pygame37" >> ~/.bash_profile
 source ~/.bash_profile
 ## and you should see no errors with prompt showing (pygame37)
