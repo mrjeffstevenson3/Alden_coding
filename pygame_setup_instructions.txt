@@ -4,6 +4,7 @@
 /usr/bin/ruby -e "$(curl -fsSL https://raw.githubusercontent.com/Homebrew/install/master/install)"
 brew install wget
 cd ${HOME}; mkdir -p Software; cd Software;
+echo "alias cdsw='cd ${HOME}/Software'" >> ~/.bash_profile
 wget https://repo.anaconda.com/archive/Anaconda3-2019.10-MacOSX-x86_64.sh
 bash Anaconda3-2019.10-MacOSX-x86_64.sh
 ## The installer prompts “In order to continue the installation process,
@@ -27,4 +28,7 @@ echo "conda activate pygame37" >> ~/.bash_profile
 source ~/.bash_profile
 ## and you should see no errors with prompt showing (pygame37)
 ## now we build up the env so pygame is happy:
-
+wget -O ~/Downloads http://www.libsdl.org/release/SDL2-2.0.10.dmg
+## Now install SDL2 from disk image
+## while that is going on go back to same terminal with prompt showing (pygame37) and paste
+conda install numpy pandas pathlib matplotlib seaborn jupyter scipy
