@@ -1,2 +1,2 @@
-# Alden_coding
-Collaborative repo for Alden's python coding
+# collab coding
+Collaborative repo for python coding with friends
