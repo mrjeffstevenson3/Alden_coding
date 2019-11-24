@@ -1,0 +1,30 @@
+## assuming you have installed xcode, xquartz, and xcode command line tools. if not do that 1st
+## see detailed instruction here: https://docs.anaconda.com/anaconda/install/mac-os/
+## first get hombrew
+/usr/bin/ruby -e "$(curl -fsSL https://raw.githubusercontent.com/Homebrew/install/master/install)"
+brew install wget
+cd ${HOME}; mkdir -p Software; cd Software;
+wget https://repo.anaconda.com/archive/Anaconda3-2019.10-MacOSX-x86_64.sh
+bash Anaconda3-2019.10-MacOSX-x86_64.sh
+## The installer prompts “In order to continue the installation process,
+## please review the license agreement.” Click Enter to view the license terms.
+## Scroll to the bottom of the license terms and enter yes to agree to them.
+## The installer next prompts you to Press Enter to confirm the location change it to
+## ${HOME}/Software/anaconda3
+## The installer prompts 
+## “Do you wish the installer to initialize Anaconda3 by running conda init?”
+## say “yes”
+## when done open a new terminal the one you just used is stale
+## in new terminal type
+conda info  ## and
+conda list
+# you should see a list installed packages. now we create the pygame environment
+conda config --add channels conda-forge
+conda create --name pygame37 python=3.7
+conda activate pygame37
+## if this succeeds the add this to your bash_profile so terminal starts here every time ie
+echo "conda activate pygame37" >> ~/.bash_profile
+source ~/.bash_profile
+## and you should see no errors with prompt showing (pygame37)
+## now we build up the env so pygame is happy:
+
