@@ -28,7 +28,7 @@ echo "conda activate pygame37" >> ~/.bash_profile
 source ~/.bash_profile
 ## and you should see no errors with prompt showing (pygame37)
 ## now we build up the env so pygame is happy:
-wget -O ~/Downloads http://www.libsdl.org/release/SDL2-2.0.10.dmg
+wget -O ~/Downloads/SDL2-2.0.10.dmg http://www.libsdl.org/release/SDL2-2.0.10.dmg
 ## Now install SDL2 from disk image
 ## while that is going on go back to same terminal with prompt showing (pygame37) and paste
-conda install numpy pandas pathlib matplotlib seaborn jupyter scipy
+conda install numpy pandas pathlib matplotlib seaborn jupyter scipy jupyter
