@@ -35,7 +35,7 @@ LL_BLUE = (  51, 204, 204)
 # Opening and setting the window size 
 Size = (800, 600) 
 screen = pygame.display.set_mode(Size) 
-pygame.display.set_caption("The Worlds Hardest Game") 
+pygame.display.set_caption("The Worlds Most Hardest Game") ##
 
 # Loop until the user clicks the close button 
 done = False
@@ -59,7 +59,7 @@ font2 = pygame.font.SysFont('Calibri', 30, True, False)
 font3 = pygame.font.SysFont('Calibri', 15, True, False)
 
 Music = pygame.mixer.Sound("Music.ogg")
-Background = pygame.image.load("background.png")
+Background = pygame.image.load("black_background.png")
 
 #---- Leader Board related code --------
 
@@ -200,9 +200,9 @@ while not done:
         # User let up on a key
         elif event.type == pygame.KEYUP:
             if event.key == pygame.K_LEFT or event.key == pygame.K_RIGHT:
-                x_speed = 0
+                x_speed = 0  ## 0
             elif event.key == pygame.K_UP or event.key == pygame.K_DOWN:
-                y_speed = 0
+                y_speed = 0  ## 0
             elif event.key == pygame.K_c:
                 if Level < 5:
                     Level = Level+1
@@ -229,10 +229,10 @@ while not done:
 
         screen.blit(Background, (0, 0))
         
-        Title = L_font.render("The Worlds", True, BLUE)
-        Title2 = L_font.render("Hardest Game", True, BLUE)
+        Title = L_font.render("The Worlds Most", True, BLUE)  ## Most
+        Title2 = L_font.render("Hardest Game", True, PURPLE)  ## BLUE
         screen.blit(Title, [165, 60])
-        screen.blit(Title2, [270, 130])
+        screen.blit(Title2, [170, 130])
         
         Play = font.render("Play ", True, RED)
         Instr = font.render("Instructions ", True, L_BLUE)
@@ -242,8 +242,8 @@ while not done:
         screen.blit(Instr, [237, 330])
         screen.blit(Leader, [219, 410])
 
-        By = font2.render("By Dominik Alkhovik", True, BLACK)
-        Version = font3.render("Version 1.0.1", True, BLACK)
+        By = font2.render("By ", True, PURPLE)
+        Version = font3.render("Version 0.1", True, PURPLE)
 
         screen.blit(By, [20, 550])
         screen.blit(Version, [700, 580])
@@ -282,7 +282,7 @@ while not done:
                     if i%2 == 1: 
                          direction = 2
                     Lv1.append(BlueBall(105+(i*50),280,direction,0,800,50,510,40,2))
-                
+									##	       x, y, direction,xl,xr,yt,yb,thick,speed
 
             for i in Lv1:
                 i.move()
@@ -319,37 +319,38 @@ while not done:
             pygame.draw.line(screen, BLACK, [780,390],[700, 390],5)
             pygame.draw.line(screen, BLACK, [700,390],[700, 550],5)
 
-            if event.type == pygame.MOUSEBUTTONUP and x > 750 and x < 800 and y > 0 and y < 50:#Pause button clicked
+            if event.type == pygame.MOUSEBUTTONUP and x > 750 and x < 800 and y > 0 and y < 50:
+            	#Pause button clicked
                 Page = 4
 
 
-            if x_coord < 20:
+            if x_coord <= 20:
                 x_coord = 20
-            if x_coord > 740:
+            if x_coord >= 740:
                 x_coord = 740
-            if y_coord < 50:
+            if y_coord <= 50:
                 y_coord = 50
-            if y_coord > 510:
+            if y_coord >= 510:
                 y_coord = 510
 
-            if y_coord < 210 and y_coord > 208:
-                if x_coord < 100:
+            if y_coord <= 210 and y_coord >= 208:
+                if x_coord <= 100:
                     y_coord = 210
-            elif y_coord > 350 and y_coord < 352:
-                if x_coord < 100:
+            elif y_coord >= 350 and y_coord <= 352:
+                if x_coord <= 100:
                     y_coord = 350
             elif x_coord <= 100:
-                if y_coord < 210 or y_coord > 350:
+                if y_coord <= 210 or y_coord >= 350:
                     x_coord = 100
 
-            if y_coord < 210 and y_coord > 208:
-                if x_coord > 660:
+            if y_coord <= 210 and y_coord >= 208:
+                if x_coord >= 660:
                     y_coord = 210
-            elif y_coord > 350 and y_coord < 352:
-                if x_coord > 660:
+            elif y_coord >= 350 and y_coord <= 352:
+                if x_coord >= 660:
                     y_coord = 350
             elif x_coord >= 660:
-                if y_coord < 210 or y_coord > 350:
+                if y_coord <= 210 or y_coord >= 350:
                     x_coord = 660
 
 
@@ -1054,7 +1055,7 @@ while not done:
         
         Leaderboard = L_font.render("Leaderboard",True, GREEN)
         Pos = font2.render("Pos", True, BLACK)
-        one = font2.render("1st", True, BLACK)
+        one = font2.render("1st   me", True, BLACK)  ##
         two = font2.render("2nd", True, BLACK)
         three = font2.render("3rd", True, BLACK)
         four = font2.render("4th", True, BLACK)
@@ -1289,27 +1290,33 @@ while not done:
     #---------------------------- PAGE 6 ----------------------------------------------
 
     if Page == 6:
+        
+        
         if Level == 2: 
             screen.blit(L_font.render("Dont even bother trying", True, BLACK), [50, 250])
             Count += 1
+            Page = 1
             if Count == 400:
                 Page = 1
                 Count = 0
         if Level == 3:
             screen.blit(L_font.render("Harder than it looks", True, BLACK), [50, 250])
             Count += 1
+            Page = 1
             if Count == 400:
                 Page = 1
                 Count = 0
         if Level == 4:
             screen.blit(L_font.render("Hell, why not", True, BLACK), [50, 250])
             Count += 1
+            Page = 1
             if Count == 400:
                 Page = 1
                 Count = 0
         if Level == 5:
             screen.blit(L_font.render("Now it gets hard", True, BLACK), [50, 250])
             Count += 1
+            Page = 1
             if Count == 400:
                 Page = 1
                 Count = 0
