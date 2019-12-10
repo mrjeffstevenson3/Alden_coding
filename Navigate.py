@@ -57,6 +57,7 @@ screen_height = 800
 size = (screen_width, screen_height)
 screen = pygame.display.set_mode(size)
 pygame.display.set_caption("Navigate")
+background = pygame.image.load("stars_background.png")
 
 clock = pygame.time.Clock()
 
@@ -91,6 +92,7 @@ pygame.mixer.music.play(-1, 0)
 
 done = False
 while not done:
+    screen.blit(background, (0, 0))
     for event in pygame.event.get():
         if event.type == pygame.QUIT:
             done = True
@@ -122,7 +124,7 @@ while not done:
     if current_y <= 11 or current_y > screen_height-60:
         speed_y *= -0.01
 
-    screen.fill(WHITE)
+    # screen.fill(WHITE)
 
     make_spaceship(screen, current_x, current_y)
 
