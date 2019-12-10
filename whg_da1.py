@@ -182,7 +182,7 @@ def find_letter(letter):
 
 #--------------Main event loop ----------- 
 while not done:
-    Music.play()
+    # Music.play() ##
     for event in pygame.event.get():
         if event.type == pygame.QUIT: 
             done = True
