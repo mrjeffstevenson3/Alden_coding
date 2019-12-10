@@ -123,7 +123,7 @@ while not done:
         speed_x *= -0.01
     if current_y <= 11 or current_y > screen_height-60:
         speed_y *= -0.01
-
+    # starts_background replaces white
     # screen.fill(WHITE)
 
     make_spaceship(screen, current_x, current_y)
