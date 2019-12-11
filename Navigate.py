@@ -10,15 +10,93 @@ DARKGRAY = (96, 96, 96)
 BLUE = (51, 153, 215)
 GREEN = (153, 240, 51)
 
+# ===================================================== GAME SETUP ====================================================*
+
+# PYGAME SETUP
+pygame.init()
+screen_width = 1250
+screen_height = 800
+size = (screen_width, screen_height)
+screen = pygame.display.set_mode(size)
+pygame.display.set_caption("Navigate")
+clock = pygame.time.Clock()
+
+# hide the mouse cursor
+pygame.mouse.set_visible(0) # 0 false, 1 true
+
+
+background = pygame.image.load("stars.jpg")
+
+# MUSIC
+#intro_music = "intromsc.mp3"
+#game_music = "gamemsc.mp3"
+
+#pygame.mixer.music.load(game_music)
+#pygame.mixer.music.play(-1, 0)
+
+# OBJECTS
+asteroid = pygame.image.load("asteroid.png")
+
+
+# movement speed
+speed_x = 0
+speed_y = 0
+
+# spaceship starting position
+current_x = 0
+current_y = screen_height/2
+
+# ====================================================== CLASSES ======================================================*
+
+class Asteroid:
+    def __init__(self, x, y, direction, left_bound, right_bound, top_bound, bottom_bound, asteroid, speed):
+        self.x = x
+        self.y = y
+        self.direction = direction
+        self.left_bound = left_bound
+        self.right_bound = right_bound
+        self.top_bound = top_bound
+        self.bottom_bound = bottom_bound
+        self.asteroid = asteroid
+        self.speed = speed
+
+    def move(self):
+        """
+        x_bound = (0, 1250)
+        y_bound = (0, 800)
+        direction 0 = left or decreasing x
+        direction 1 = right or increasing x
+        direction 2 = up or decreasing y
+        direction 3 = down or increasing y
+
+        motion:
+        x increase ==> moves right or d
+        x decrease ==> moves left
+        y increase ==> moves down
+        y decrease ==> moves up
+        """
+
+        if self.y <= self.top_bound:
+            self.direction = 2
+        elif self.y >= self.bottom_bound:
+            self.direction = 0
+        elif self.x <= self.left_bound:
+            self.direction = 1
+        elif self.x >= self.right_bound:
+            self.direction = 3
+
+        if self.direction == 0:
+            self.y -= self.speed
+        elif self.direction == 1:
+            self.x += self.speed
+        elif self.direction == 2:
+            self.y += self.speed
+        elif self.direction == 3:
+            self.x -= self.speed
+        screen.blit(self.asteroid, (self.x, self.y))
+
+
 # ====================================================== FUNCTIONS ====================================================*
-
-# ideally, this funciton would not actually be a part of the main game page, but rather it would be a part of the Spaceship class
-# i need to create classes for objects such as Spaceship and Obstacle
-
-# i could control the movement of the obstacles pretty much the same way as i did with the spaceship, except i would preset them
-# ...instead of responding to user input
-
-# the only major concern i have is accounting for collisions and when the spaceship hits an obstacle that's moving
 
 def make_spaceship (screen, x, y):
     # Ship Body
@@ -49,49 +127,14 @@ def make_spaceship (screen, x, y):
     # Width: 100px; Height: 60px
 
 
-# ===================================================== GAME SETUP ====================================================*
 
-pygame.init()
-screen_width = 1250
-screen_height = 800
-size = (screen_width, screen_height)
-screen = pygame.display.set_mode(size)
-pygame.display.set_caption("Navigate")
-background = pygame.image.load("stars_background.png")
+# ======================================================== RUN GAME ===================================================*
 
-clock = pygame.time.Clock()
-
-# hide the mouse cursor
-pygame.mouse.set_visible(0) # 0 false, 1 true
-
-# movement speed
-speed_x = 0
-speed_y = 0
-
-# spaceship starting position
-current_x = 0
-current_y = screen_height/2
-
-'''
-# MUSIC
-intro_music = "intromsc.mp3"
-game_music = "gamemsc.mp3"
-
-pygame.mixer.music.load(game_music)
-pygame.mixer.music.play(-1, 0)
-'''
-
-# ======================================================== GAME =======================================================*
-
-# the game is run through a loop, which checks itself first for user input events
-# first check to see if the game has been quit, if it is, then the game loop boolean will become false, and the game will end upon the next iteration
-# the elifs are the keyboard inputs from the user
-# im using the arrow keys to change the "speed" of the character by increasing or decreasing the x, y coordinates of the character...
-# ...when the arrow keys are pressed
-
+asteroids = []
 
 done = False
 while not done:
+    screen.fill(WHITE)
     screen.blit(background, (0, 0))
     for event in pygame.event.get():
         if event.type == pygame.QUIT:
@@ -99,20 +142,23 @@ while not done:
             pygame.mixer.music.stop()
         elif event.type == pygame.KEYDOWN:
             if event.key == pygame.K_LEFT:
-                speed_x = -3
+                speed_x = -5
             elif event.key == pygame.K_RIGHT:
-                speed_x = 3
+                speed_x = 5
             elif event.key == pygame.K_UP:
-                speed_y = -3
+                speed_y = -5
             elif event.key == pygame.K_DOWN:
-                speed_y = 3
+                speed_y = 5
         elif event.type == pygame.KEYUP:
             if event.key == pygame.K_LEFT or event.key == pygame.K_RIGHT:
                 speed_x = 0
             elif event.key == pygame.K_UP or event.key == pygame.K_DOWN:
                 speed_y = 0
 
-
+    for i in range(1, 6):
+        asteroids.append(Asteroid(i*100, screen_height/2, 2, 0, screen_width, 0, screen_height, asteroid, 10))
+    for a in asteroids:
+        a.move()
 
     # move the stick figure according to the speed
     current_x += speed_x
@@ -126,10 +172,11 @@ while not done:
     # starts_background replaces white
     # screen.fill(WHITE)
 
+    # OBJECT CREATION
     make_spaceship(screen, current_x, current_y)
 
     # update the screen
     pygame.display.flip()
-    clock.tick(60)
+    clock.tick(24)
 # end of main
 pygame.QUIT

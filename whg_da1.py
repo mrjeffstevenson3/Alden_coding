@@ -96,6 +96,7 @@ Count = 0
 
 class BlueBall:
     def __init__(self, x, y, direction,xl,xr,yt,yb,thick,speed):
+        ## BlueBall(105+(i*50) ,280,direction,0,800,50,510,40,2)
         self.x = x
         self.y = y
         self.direction = direction
@@ -151,7 +152,6 @@ class BlueBallCircle:
         
 def square(x):
     return x*x
-            
 
 def find_letter(letter):
     global No1
@@ -282,7 +282,7 @@ while not done:
                     if i%2 == 1: 
                          direction = 2
                     Lv1.append(BlueBall(105+(i*50),280,direction,0,800,50,510,40,2))
-									##	       x, y, direction,xl,xr,yt,yb,thick,speed
+									##	       x,   y, direction,xl,xr,yt,yb,thick,speed
 
             for i in Lv1:
                 i.move()
