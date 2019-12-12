@@ -2,6 +2,7 @@ import pygame
 testing = True
 # ================================================= INSTANCE VARIABLES ================================================*
 # this could be a dictionary called colors accessed by colors['WHITE'] and importable into any game module
+# colors and fonts dictionary and objects classes could all be put in another file called nav_obj.py and imported here
 BLACK = (0, 0, 0)
 WHITE = (255, 255, 255)
 RED = (255, 0, 0)
@@ -25,7 +26,7 @@ clock = pygame.time.Clock()
 # hide the mouse cursor
 pygame.mouse.set_visible(testing) # 0 false, 1 true
 
-
+# (could move to nav_obj.py)
 background = pygame.image.load("stars_background.png")
 
 # MUSIC
@@ -35,7 +36,7 @@ background = pygame.image.load("stars_background.png")
 #pygame.mixer.music.load(game_music)
 #pygame.mixer.music.play(-1, 0)
 
-# OBJECTS
+# OBJECTS (could move to nav_obj.py)
 asteroid = pygame.image.load("asteroid.png")
 key = pygame.image.load("starkey.png")
 
@@ -47,13 +48,15 @@ speed_y = 0
 current_x = 15
 current_y = screen_height/2
 
-# TEXT/FONTS
+# TEXT/FONTS (could move to nav_obj.py)
 L_font = pygame.font.SysFont('Calibri', 70, True, False)
 font = pygame.font.SysFont('Calibri', 60, True, False)
 font2 = pygame.font.SysFont('Calibri', 30, True, False)
 font3 = pygame.font.SysFont('Calibri', 15, True, False)
-fonts = {'fontC70': L_font.render, 'fontC60': font.render, 'fontC30': font2.render, 'fontC15': font3.render}
+fonts = {'Calibri70Bold': L_font.render, 'Calibri60Bold': font.render, 'Calibri30Bold': font2.render,
+         'Calibri15Bold': font3.render}
 # ====================================================== CLASSES ======================================================*
+# (could move all to nav_obj.py)
 
 class Asteroid:
     if testing:
@@ -114,6 +117,7 @@ class Key:
         screen.blit(self.key, (self.x, self.y))
 
 # ====================================================== FUNCTIONS ====================================================*
+# (could move all to nav_obj.py)
 
 def square(x):
     return x*x
@@ -160,13 +164,13 @@ def collide(obj, threshold):
         return False
 
 """
-usages are with colors and fonts dictionary implemented:
-text("Are you scared?", [screen_width/3, screen_height/4], 'fontC70', colors['WHITE'])
+usages are with colors and fonts dictionaries implemented and perhaps imported from nav_obj.py:
+text("Are you scared?", [screen_width/3, screen_height/4], 'Calibri70Bold', colors['WHITE'])
 
 # collison test
 collided = False
 for a in L1_asteroids:
-    if collide(a, 5000):
+    if collide(a, 5000):   #<===
         collided = True
         current_x = 0
         current_y = screen_height / 2
