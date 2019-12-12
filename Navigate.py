@@ -152,6 +152,9 @@ def make_spaceship (screen, x, y):
     pygame.draw.ellipse(screen, BLACK, (x+56, y+3, 5, 8))
 
 def text(text, position, font, color):
+    """
+    from https://stackoverflow.com/questions/3061/calling-a-function-of-a-module-by-using-its-name-a-string
+    """
     if font in fonts:
         screen.blit(fonts[font](text, True, color), position)
     else:
