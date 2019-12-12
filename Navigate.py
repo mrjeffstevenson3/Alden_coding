@@ -53,6 +53,7 @@ L_font = pygame.font.SysFont('Calibri', 70, True, False)
 font = pygame.font.SysFont('Calibri', 60, True, False)
 font2 = pygame.font.SysFont('Calibri', 30, True, False)
 font3 = pygame.font.SysFont('Calibri', 15, True, False)
+# more descriptive universal calls to the font library
 fonts = {'Calibri70Bold': L_font.render, 'Calibri60Bold': font.render, 'Calibri30Bold': font2.render,
          'Calibri15Bold': font3.render}
 # ====================================================== CLASSES ======================================================*
