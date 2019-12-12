@@ -1,7 +1,7 @@
 import pygame
-
+testing = True
 # ================================================= INSTANCE VARIABLES ================================================*
-
+# this could be a dictionary called colors accessed by colors['WHITE'] and importable into any game module
 BLACK = (0, 0, 0)
 WHITE = (255, 255, 255)
 RED = (255, 0, 0)
@@ -9,6 +9,7 @@ LIGHTGRAY = (170, 170, 170)
 DARKGRAY = (96, 96, 96)
 BLUE = (51, 153, 215)
 GREEN = (153, 240, 51)
+TRANSPARENT = (0, 0, 0, 0)
 
 # ===================================================== GAME SETUP ====================================================*
 
@@ -22,10 +23,10 @@ pygame.display.set_caption("Navigate")
 clock = pygame.time.Clock()
 
 # hide the mouse cursor
-pygame.mouse.set_visible(0) # 0 false, 1 true
+pygame.mouse.set_visible(testing) # 0 false, 1 true
 
 
-background = pygame.image.load("stars.jpg")
+background = pygame.image.load("stars_background.png")
 
 # MUSIC
 #intro_music = "intromsc.mp3"
@@ -36,19 +37,27 @@ background = pygame.image.load("stars.jpg")
 
 # OBJECTS
 asteroid = pygame.image.load("asteroid.png")
-
+key = pygame.image.load("starkey.png")
 
 # movement speed
 speed_x = 0
 speed_y = 0
 
 # spaceship starting position
-current_x = 0
+current_x = 15
 current_y = screen_height/2
 
+# TEXT/FONTS
+L_font = pygame.font.SysFont('Calibri', 70, True, False)
+font = pygame.font.SysFont('Calibri', 60, True, False)
+font2 = pygame.font.SysFont('Calibri', 30, True, False)
+font3 = pygame.font.SysFont('Calibri', 15, True, False)
+fonts = {'fontC70': L_font.render, 'fontC60': font.render, 'fontC30': font2.render, 'fontC15': font3.render}
 # ====================================================== CLASSES ======================================================*
 
 class Asteroid:
+    if testing:
+        speed = 1
     def __init__(self, x, y, direction, left_bound, right_bound, top_bound, bottom_bound, asteroid, speed):
         self.x = x
         self.y = y
@@ -63,14 +72,14 @@ class Asteroid:
     def move(self):
         """
         x_bound = (0, 1250)
-        y_bound = (0, 800)
-        direction 0 = left or decreasing x
+        y_bound = (100, 800)
+        direction 0 = up or decreasing y
         direction 1 = right or increasing x
-        direction 2 = up or decreasing y
-        direction 3 = down or increasing y
+        direction 2 = down or increasing y
+        direction 3 = left or decreasing x
 
         motion:
-        x increase ==> moves right or d
+        x increase ==> moves right
         x decrease ==> moves left
         y increase ==> moves down
         y decrease ==> moves up
@@ -95,10 +104,25 @@ class Asteroid:
             self.x -= self.speed
         screen.blit(self.asteroid, (self.x, self.y))
 
+class Key:
+    def __init__(self, x, y, key):
+        self.x = x
+        self.y = y
+        self.key = key
+
+    def place(self):
+        screen.blit(self.key, (self.x, self.y))
 
 # ====================================================== FUNCTIONS ====================================================*
 
+def square(x):
+    return x*x
+
 def make_spaceship (screen, x, y):
+    # Dimensions:
+    # Width: 100px;
+    # Height: 60px
+
     # Ship Body
     pygame.draw.ellipse(screen, DARKGRAY, (x+5, y, 90, 60))
     pygame.draw.ellipse(screen, LIGHTGRAY, (x, y, 100, 50))
@@ -123,15 +147,58 @@ def make_spaceship (screen, x, y):
     pygame.draw.ellipse(screen, BLACK, (x+46, y+3, 5, 8))
     pygame.draw.ellipse(screen, BLACK, (x+56, y+3, 5, 8))
 
-    # Dimensions
-    # Width: 100px; Height: 60px
+def text(text, position, font, color):
+    if font in fonts:
+        screen.blit(fonts[font](text, True, color), position)
+    else:
+        raise ValueError('Font not in dictionary of fonts')
 
+def collide(obj, threshold):
+    if square((current_x) - (obj.x)) + square((current_y) - (obj.y)) <= threshold:
+        return True
+    else:
+        return False
 
+"""
+usages are with colors and fonts dictionary implemented:
+text("Are you scared?", [screen_width/3, screen_height/4], 'fontC70', colors['WHITE'])
+
+# collison test
+collided = False
+for a in L1_asteroids:
+    if collide(a, 5000):
+        collided = True
+        current_x = 0
+        current_y = screen_height / 2
+        L1key_collected = [False]*3
+        deaths += 1
+        break
+
+"""
 
 # ======================================================== RUN GAME ===================================================*
 
-asteroids = []
+level = 2
+deaths = 0
 
+# LEVEL ONE CONSTRUCTION
+L1_asteroids = []
+for i in range(1, 6):
+    L1_asteroids.append(Asteroid(i*200, screen_height/2, 2, 0, screen_width-75, 100, screen_height-64, asteroid, 15))
+
+# LEVEL TWO CONSTRUCTION
+L2_asteroids = []
+L2_asteroids.append(Asteroid(screen_width/2, screen_height/2-75, 3, 10, screen_width/2, 100, screen_height-64, asteroid, 30))
+L2_asteroids.append(Asteroid(screen_width/2, screen_height/2+75, 3, 10, screen_width/2-100, 100, screen_height-64, asteroid, 30))
+# FINISH THE LEVEL HERE
+
+L2_keys = []
+L2_keys.append(Key(25, screen_height/2, key))
+L2key_collected = [False]
+
+
+
+# GAME INTERFACE
 done = False
 while not done:
     screen.fill(WHITE)
@@ -155,28 +222,112 @@ while not done:
             elif event.key == pygame.K_UP or event.key == pygame.K_DOWN:
                 speed_y = 0
 
-    for i in range(1, 6):
-        asteroids.append(Asteroid(i*100, screen_height/2, 2, 0, screen_width, 0, screen_height, asteroid, 10))
-    for a in asteroids:
-        a.move()
-
     # move the stick figure according to the speed
     current_x += speed_x
     current_y += speed_y
 
     # screen boundaries -> make the ship (essentially) stop when it hits a wall
-    if current_x <= 0 or current_x > screen_width-100:
+    if current_x <= 3 or current_x > screen_width - 100:
         speed_x *= -0.01
-    if current_y <= 11 or current_y > screen_height-60:
+    if current_y <= 111 or current_y > screen_height - 60:
         speed_y *= -0.01
-    # starts_background replaces white
-    # screen.fill(WHITE)
 
-    # OBJECT CREATION
-    make_spaceship(screen, current_x, current_y)
+    if level == 0:
+        pygame.mouse.set_visible(True)
+        screen.fill(DARKGRAY)
+        title = L_font.render("Are you scared?", True, WHITE)
+        answerYes = font.render("Yes", True, GREEN)
+        answerNo = font.render("No", True, RED)
+        name = font3.render("Created by Alden Hinden-Stevenson", True, WHITE)
+        screen.blit(title, [screen_width/3, screen_height/4])
+        screen.blit(answerYes, [screen_width/3-30, 2*screen_height/3])
+        screen.blit(answerNo, [2*screen_width/3-30, 2*screen_height/3])
+        screen.blit(name, [50, screen_height-50])
+
+        pos = pygame.mouse.get_pos()
+        x = pos[0]
+        y = pos[1]
+        if event.type == pygame.MOUSEBUTTONUP and x > 2*screen_width/3-40 and x < 2*screen_width/3+40 \
+            and y > 2*screen_height/3 and y < 2*screen_height/3+50:
+            level = 1
+        elif event.type == pygame.MOUSEBUTTONUP and x > screen_width/3-40 and x < screen_width/3+60 \
+            and y > 2*screen_height/3 and y < 2*screen_height/3+50:
+            done = True
+
+    if level > 0:
+        # spawn character
+        make_spaceship(screen, current_x, current_y)
+
+        # setup level counter and death counter
+        pygame.draw.rect(screen, BLACK, [0, 0, screen_width, 100])
+        death_counter = L_font.render("Deaths: " + str(deaths), True, RED)
+        level_num = L_font.render("Level: " + str(level), True, GREEN)
+        screen.blit(death_counter, [900, 25])
+        screen.blit(level_num, [100, 25])
+
+        pygame.mouse.set_visible(testing)
+
+    if level == 1:
+        # set target
+        pygame.draw.rect(screen, GREEN, [screen_width-100, screen_height/2-150, screen_width, screen_height/2])
+        instructions1 = font2.render("TRY TO", True, BLACK)
+        instructions2 = font2.render("GET TO", True, BLACK)
+        instructions3 = font2.render("HERE!!", True, BLACK)
+        screen.blit(instructions1, [screen_width-90, screen_height/2-30])
+        screen.blit(instructions2, [screen_width-90, screen_height/2])
+        screen.blit(instructions3, [screen_width-90, screen_height/2+30])
+
+        # check for completion
+        if current_x > screen_width-150 and screen_height/2-150 < current_y < screen_height/2+150:
+            level = 2
+            current_x = screen_width/2
+            current_y = screen_height/2
+
+        # set asteroids and keys
+        for a in L1_asteroids:
+            a.move()
+
+        # collison test
+        collided = False
+        for a in L1_asteroids:
+            if square((current_x) - (a.x)) + square((current_y) - (a.y)) <= 5000:
+                collided = True
+                current_x = 0
+                current_y = screen_height / 2
+                L1key_collected = [False]*3
+                deaths += 1
+                break
+
+    if level == 2:
+        # set asteroids and keys
+        for a in L2_asteroids:
+            a.move()
+        for collected, key in zip(L2key_collected, L2_keys):
+            if not collected:
+                key.place()
+
+        # collison test
+        collided = False
+        for a in L2_asteroids:
+            if square((current_x) - (a.x)) + square((current_y) - (a.y)) <= 5000:
+                collided = True
+                current_x = 0
+                current_y = screen_height / 2
+                L2key_collected = [False] * 3
+                deaths += 1
+                break
+
+        # key collection test
+        for i, k in enumerate(L2_keys):
+            if square((current_x) - (k.x)) + square((current_y) - (k.y)) <= 7000:
+                L2key_collected[i] = True
+                if all(L2key_collected):
+                    level = 2
+                    # set level 2 spawn position
+                    break
 
     # update the screen
     pygame.display.flip()
-    clock.tick(24)
+    clock.tick(30)
 # end of main
 pygame.QUIT

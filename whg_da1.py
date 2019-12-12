@@ -53,7 +53,7 @@ Page = 0
 Level = 1
 Deaths = 0
 
-L_font = pygame.font.SysFont('Calibri', 70, True, False)#initialise fonts/sizes
+L_font = pygame.font.SysFont('Calibri', 70, True, False) #initialise fonts/sizes
 font = pygame.font.SysFont('Calibri', 60, True, False)
 font2 = pygame.font.SysFont('Calibri', 30, True, False)
 font3 = pygame.font.SysFont('Calibri', 15, True, False)
@@ -299,10 +299,12 @@ while not done:
             pygame.draw.rect(screen, GREEN, [ 700,210,80,180])           
             pygame.draw.rect(screen, BLACK, [760,10,10,30])
             pygame.draw.rect(screen, BLACK, [777,10,10,30])
+
             DeathsS = font2.render("Deaths:", True, BLACK)
             DeathsInt = font2.render(str(Deaths), True, BLACK)
             screen.blit(DeathsS, [600, 13])
             screen.blit(DeathsInt, [700, 13])
+
             pygame.draw.rect(screen, RED, [x_coord,y_coord,40,40])
 
             pygame.draw.line(screen, BLACK, [100,50],[700, 50],5)
@@ -364,8 +366,8 @@ while not done:
                     break
             if collided == True:
                 Deaths += 1
-                x_coord =10
-                y_coord =280
+                x_coord = 10
+                y_coord = 280
                 Lv1Yellow = False
 
             if square(x_coord - 375) + square(y_coord - 280) <= 1600:
